@@ -2,6 +2,7 @@
 import "dotenv/config";
 import cors from "cors";
 import express from "express";
+import { sendEmail } from "./utils/mail";
 
 // Variables
 const app = express();
@@ -20,6 +21,21 @@ app.get("/", async (req, res) => {
     res.render("index");
   } catch (error) {
     console.error(error);
+  }
+});
+
+app.post("/mail", async (req, res) => {
+  try {
+    const { email, name, subject, message } = req.body;
+    const data = {
+      from_email: email,
+      name,
+      subject,
+      message,
+    };
+    await sendEmail(data);
+  } catch (error) {
+    console.log(error);
   }
 });
 
